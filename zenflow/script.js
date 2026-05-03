@@ -187,6 +187,8 @@ var timerTimeEl = document.getElementById('timer-time');
 var timerLabelEl = document.getElementById('timer-label');
 var ringProgress = document.getElementById('ring-progress');
 var btnStart = document.getElementById('btn-timer-start');
+var customTimerInputWrap = document.getElementById('custom-timer-input-wrap');
+var customTimerInput = document.getElementById('custom-timer-input');
 
 // inject a gradient into the SVG so the timer ring has a purple-to-cyan color
 var timerSvg = document.querySelector('.timer-ring');
@@ -200,10 +202,26 @@ document.querySelectorAll('.timer-tab').forEach(function (tab) {
     if (timerRunning) return;
     document.querySelectorAll('.timer-tab').forEach(function (t) { t.classList.remove('active'); });
     tab.classList.add('active');
-    timerTotal = timerRemaining = (+tab.dataset.duration) * 60;
+    
+    if (tab.id === 'timer-custom') {
+      customTimerInputWrap.style.display = 'flex';
+      var customVal = +(customTimerInput.value) || 25;
+      timerTotal = timerRemaining = customVal * 60;
+    } else {
+      customTimerInputWrap.style.display = 'none';
+      timerTotal = timerRemaining = (+tab.dataset.duration) * 60;
+    }
+    
     updateTimerDisplay();
     timerLabelEl.textContent = 'Ready to focus';
   });
+});
+
+customTimerInput.addEventListener('input', function() {
+  if (timerRunning || document.querySelector('.timer-tab.active').id !== 'timer-custom') return;
+  var customVal = +(customTimerInput.value) || 1;
+  timerTotal = timerRemaining = customVal * 60;
+  updateTimerDisplay();
 });
 
 btnStart.addEventListener('click', function () { timerRunning ? pauseTimer() : startTimer(); });
@@ -234,7 +252,13 @@ function pauseTimer() {
 }
 function resetTimer() {
   clearInterval(timerInterval); timerRunning = false;
-  timerTotal = timerRemaining = (+document.querySelector('.timer-tab.active').dataset.duration) * 60;
+  var activeTab = document.querySelector('.timer-tab.active');
+  if (activeTab.id === 'timer-custom') {
+    var customVal = +(customTimerInput.value) || 25;
+    timerTotal = timerRemaining = customVal * 60;
+  } else {
+    timerTotal = timerRemaining = (+activeTab.dataset.duration) * 60;
+  }
   btnStart.textContent = 'Start'; btnStart.classList.remove('running');
   timerLabelEl.textContent = 'Ready to focus';
   updateTimerDisplay();
