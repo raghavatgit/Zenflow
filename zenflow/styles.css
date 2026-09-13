@@ -271,3 +271,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   .task-input-bar{flex-wrap:wrap}
   .task-input-bar input{min-width:100%}
 }
+@media (prefers-reduced-motion: reduce) {
+    .breathe-circle, button {
+        transition: none !important;
+        transform: none !important;
+    }
+}
