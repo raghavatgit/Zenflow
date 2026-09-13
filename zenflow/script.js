@@ -323,7 +323,7 @@ function runCycle() {
   })();
 }
 
-// ambient sounds using Web Audio API - creates audio context and connects through gain nodes for volume control
+// Web Audio API soundscape: AudioContext routing with gain-node envelope control
 var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 var activeSounds = {}; // keeps track of which sounds are currently playing
 var soundBase = 'https://cdn.jsdelivr.net/gh/remvze/moodist@main/public/sounds';
@@ -371,7 +371,7 @@ document.getElementById('btn-stop-sounds').addEventListener('click', function ()
   document.querySelectorAll('.sound-card').forEach(function (c) { c.classList.remove('active'); });
 });
 
-// plays a short chime using oscillator when timer finishes
+// Two-tone harmonic oscillator chime synthesized upon timer expiration
 function playChime() {
   var osc = audioCtx.createOscillator(), g = audioCtx.createGain();
   osc.type = 'sine';
